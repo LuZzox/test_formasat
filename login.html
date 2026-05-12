@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - FormaSat</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; }
+        .success-msg { background-color: #d4edda; color: #155724; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; text-align: center; font-size: 0.9rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; }
+        input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; border: none; border-radius: 4px; background-color: #28a745; color: white; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Connexion Étudiant</h2>
+
+    <?php if (isset($_GET['registration']) && $_GET['registration'] === 'success'): ?>
+        <div class="success-msg">Inscription réussie ! Vous pouvez vous connecter.</div>
+    <?php endif; ?>
+
+    <form action="traitement_login.php" method="POST">
+        <div class="form-group">
+            <label for="email">Adresse Email</label>
+            <input type="email" id="email" name="email" required placeholder="exemple@mail.com">
+        </div>
+
+        <div class="form-group">
+            <label for="mot_de_passe">Mot de passe</label>
+            <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+        </div>
+
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <p style="text-align:center; font-size: 0.9rem; margin-top: 1rem;">
+        Pas encore de compte ? <a href="inscription.php">Inscrivez-vous</a>
+    </p>
+</div>
+
+</body>
+</html>
