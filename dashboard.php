@@ -66,24 +66,23 @@ if (isset($_GET['noted']) && $_GET['noted'] == 'success') {
             <div class="success-message"><?= $success_message ?></div>
         <?php endif; ?>
         <p class="welcome">Voici la liste de vos modules. N'oubliez pas de les évaluer !</p>
-
         <ul class="module-list">
             <?php foreach ($modules as $module): ?>
                 <li class="module-item <?= $module['a_evalue'] > 0 ? 'evaluated' : 'not-evaluated' ?>">
                     <div class="module-info">
-                        <strong><?= htmlspecialchars($module['module_nom']) ?></strong> (<?= htmlspecialchars($module['promo_libelle']) ?>)
-                        <br>Formateur : <?= htmlspecialchars($module['prof_prenom'] . ' ' . $module['prof_nom']) ?>
+                        <strong><?= htmlspecialchars($module['module_nom']) ?></strong><br>
+                        Promotion: <?= htmlspecialchars($module['promo_libelle']) ?><br>
+                        Professeur: <?= htmlspecialchars($module['prof_prenom'] . ' ' . $module['prof_nom']) ?>
                     </div>
                     <div class="module-actions">
                         <?php if ($module['a_evalue'] > 0): ?>
                             <span>Évalué</span>
                         <?php else: ?>
-                            <a href="evaluation.php?module_id=<?= $module['id'] ?>">Évaluer</a>
+                            <a href="evaluate.php?module_id=<?= $module['id'] ?>">Évaluer</a>
                         <?php endif; ?>
                     </div>
                 </li>
             <?php endforeach; ?>
-        </ul>
 
         <div class="logout-link">
             <a href="logout.php">Déconnexion</a>

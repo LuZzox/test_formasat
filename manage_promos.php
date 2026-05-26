@@ -97,6 +97,7 @@ if (!isset($_SESSION['csrf_token'])) {
         <a href="add_admin.php">🔑 Ajouter Admin</a>
         <a href="manage_promos.php" class="active">🏫 Gérer Promos</a>
         <a href="manage_profs.php">👨‍🏫 Gérer Profs</a>
+        <a href="manage_students.php">🎓 Gérer Étudiants</a>
         <a href="manage_modules.php">📚 Gérer Modules</a>
         <a href="logout.php" class="btn-logout">Déconnexion</a>
     </div>
