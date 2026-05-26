@@ -229,22 +229,4 @@ END //
 
 DELIMITER ;
 
--- 6. Données de test v2
 INSERT INTO promo (libelle, annee) VALUES ('SLAM 2025', 2025), ('SISR 2025', 2025);
-
--- Mot de passe 'prof123' haché pour les professeurs
-INSERT INTO prof (nom, prenom, email, mot_de_passe, specialite) VALUES 
-('Bourguiba', 'M.', 'm.bourguiba@formasat.fr', '$2y$10$UnL.fI99/XUaX9.e2D6fauFp8CgY9iYmK2/i/V1H7oO4uB7Q.hF9W', 'Développement'),
-('Bernard', 'M.', 'm.bernard@formasat.fr', '$2y$10$UnL.fI99/XUaX9.e2D6fauFp8CgY9iYmK2/i/V1H7oO4uB7Q.hF9W', 'Sécurité'),
-('Leroy', 'M.', 'm.leroy@formasat.fr', '$2y$10$UnL.fI99/XUaX9.e2D6fauFp8CgY9iYmK2/i/V1H7oO4uB7Q.hF9W', 'Bureautique');
-
--- Les inserts de modules utilisent maintenant les IDs des profs et promos
-INSERT INTO module (nom, description, prof_id, promo_id, date_debut, date_fin) VALUES 
-('Développement Web PHP', 'Cours PHP', 1, 1, '2025-09-01', '2025-09-30'),
-('Cybersécurité', 'Cours Sécu', 2, 1, '2025-10-01', '2025-10-31'),
-('Réseaux Avancés', 'Configuration et gestion de réseaux complexes', 2, 2, '2025-11-15', '2025-12-20'),
-('Gestion de Projet Agile', 'Méthodologies Scrum et Kanban', 1, 2, '2026-01-05', '2026-02-10');
-
--- L'identifiant est 'admin' et le mot de passe est 'admin123' (haché ici pour l'exemple)
-INSERT INTO administrateur (identifiant, mot_de_passe) VALUES 
-('admin', '$2y$10$UnL.fI99/XUaX9.e2D6fauFp8CgY9iYmK2/i/V1H7oO4uB7Q.hF9W');
