@@ -4,9 +4,8 @@ require_once 'connexion.php';
 $pdo = getConnexion();
 
 // 1. Sécurité : Vérifier si l'utilisateur est connecté (Admin ou Étudiant selon vos besoins)
-// Ici on laisse l'accès si une session est ouverte
-if (!isset($_SESSION['etudiant_id']) && !isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: admin_login.php');
     exit();
 }
 
@@ -53,26 +52,46 @@ if ($selectedModuleId) {
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - FormaSat</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        .header { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        body { display: block; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; width: 100%; }
+        .header { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        
+        /* Navigation Menu */
+        .nav-admin { background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav-admin a { background: #f0f2f5; color: #1c1e21; padding: 10px 15px; border-radius: 6px; font-weight: 500; text-decoration: none; transition: background 0.3s; font-size: 0.9rem; }
+        .nav-admin a:hover { background: #e4e6eb; color: #1877f2; }
+        .nav-admin a.active { background: #1877f2; color: #fff; }
+
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .stat-card { background: #fff; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .stat-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .stat-value { font-size: 24px; font-weight: bold; color: #007bff; }
         .stat-label { color: #666; font-size: 14px; margin-top: 5px; }
-        .chart-container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: center; }
+        .chart-container { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: center; }
         canvas { max-width: 500px; }
-        select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 250px; }
-        .btn-logout { color: #dc3545; text-decoration: none; font-weight: bold; }
+        
+        .btn-logout { color: #dc3545 !important; margin-left: auto; }
+        form select { width: auto; min-width: 250px; margin: 0; }
+        h2 { margin: 0; font-size: 1.4rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="nav-admin">
+        <a href="admin_dashboard.php" class="active">📊 Stats Modules</a>
+        <a href="add_evaluation.php">📝 Ajouter Évaluation</a>
+        <a href="add_admin.php">🔑 Ajouter Admin</a>
+        <a href="manage_promos.php">🏫 Gérer Promos</a>
+        <a href="manage_profs.php">👨‍🏫 Gérer Profs</a>
+        <a href="manage_modules.php">📚 Gérer Modules</a>
+        <a href="logout.php" class="btn-logout">Déconnexion</a>
+    </div>
+
     <div class="header">
-        <h2>Tableau de Bord des Évaluations</h2>
+        <h2>Statistiques par Module</h2>
         <form action="" method="GET">
             <select name="module_id" onchange="this.form.submit()">
                 <option value="">-- Choisir un module --</option>
@@ -83,7 +102,6 @@ if ($selectedModuleId) {
                 <?php endforeach; ?>
             </select>
         </form>
-        <a href="logout.php" class="btn-logout">Déconnexion</a>
     </div>
 
     <?php if ($stats): ?>

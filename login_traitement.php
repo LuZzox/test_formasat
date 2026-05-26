@@ -4,38 +4,13 @@ require_once 'connexion.php';
 $pdo = getConnexion();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    // 1. Tentative de connexion en tant qu'administrateur
-    $stmt = $pdo->prepare("SELECT * FROM administrateur WHERE identifiant = ?");
-    $stmt->execute([$username]);
-    $admin = $stmt->fetch();
-
-    if ($admin && password_verify($password, $admin['mot_de_passe'])) {
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['username'] = $admin['identifiant'];
-        header("Location: admin_dashboard.php");
-        exit;
-    }
-
-    // 2. Si non admin, tentative de connexion en tant que professeur (par email)
-    $stmt = $pdo->prepare("SELECT * FROM prof WHERE email = ?");
-    $stmt->execute([$username]);
-    $prof = $stmt->fetch();
-
-    if ($prof && password_verify($password, $prof['mot_de_passe'])) {
-        $_SESSION['prof_id'] = $prof['id'];
-        $_SESSION['prof_name'] = $prof['prenom'] . ' ' . $prof['nom'];
-        header("Location: prof_dashboard.php"); // Rediriger vers le tableau de bord du professeur
-        exit;
-    }
-
-    // 3. Si non admin et non prof, tentative de connexion en tant qu'étudiant (par email)
+    // Tentative de connexion en tant qu'étudiant uniquement
     $stmt = $pdo->prepare("SELECT * FROM etudiant WHERE email = ?");
-    $stmt->execute([$username]);
+    $stmt->execute([$email]);
     $etudiant = $stmt->fetch();
-
 
     if ($etudiant && password_verify($password, $etudiant['mot_de_passe'])) {
         $_SESSION['etudiant_id'] = $etudiant['id'];
@@ -44,6 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // 4. Échec de connexion
-    echo "Nom d'utilisateur ou mot de passe incorrect.";
+    header("Location: login.php?error=1");
+    exit;
 }

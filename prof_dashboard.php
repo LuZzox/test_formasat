@@ -68,7 +68,8 @@ $modules = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             Moyenne : <?= number_format($module['moy_globale'] ?? 0, 2) ?> / 5
                         </div>
                         <div class="module-actions">
-                            <a href="admin_dashboard.php?module_id=<?= $module['id'] ?>">Voir les stats détaillées</a>
+                            //un professeur peut cliquer sur un module pour voir les statistiques détaillées de ce module
+                            <a href="module_stats.php?module_id=<?= $module['id'] ?>">Voir les stats détaillées</a>
                         </div>
                     </li>
                 <?php endforeach; ?>

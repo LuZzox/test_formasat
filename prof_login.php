@@ -2,27 +2,27 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion Administration - FormaSat</title>
+    <title>Connexion Formateur - FormaSat</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="form-container">
-        <h2>Espace Administrateur</h2>
+        <h2>Espace Formateur</h2>
         <?php if (isset($_GET['error'])): ?>
-            <p style="color:red;">Identifiants incorrects ou accès refusé.</p>
+            <p style="color:red;">Email ou mot de passe incorrect.</p>
         <?php endif; ?>
-        <form action="traitement_admin_login.php" method="POST">
+        <form action="traitement_prof_login.php" method="POST">
             <div class="form-group">
-                <label>Identifiant :</label>
-                <input type="text" name="identifiant" required>
+                <label>Email Professionnel :</label>
+                <input type="email" name="email" required>
             </div>
             <div class="form-group">
                 <label>Mot de passe :</label>
-                <input type="password" name="mot_de_passe" required>
+                <input type="password" name="password" required>
             </div>
             <button type="submit">Se connecter</button>
         </form>
-        <p><a href="login.php">Retour au portail étudiant</a></p>
+        <p><a href="login.php">Connexion étudiant</a></p>
     </div>
 </body>
 </html>

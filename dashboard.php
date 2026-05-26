@@ -5,7 +5,7 @@ $pdo = getConnexion();
 
 // Vérifier que l'utilisateur est connecté en tant qu'étudiant
 if (!isset($_SESSION['etudiant_id'])) {
-    header('Location: login.php');
+    header('Location: login.html');
     exit();
 }
 
