@@ -43,7 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
 
     } catch (PDOException $e) {
-        die("Une erreur est survenue lors de l'enregistrement : " . $e->getMessage());
+        // 1. Log the true error message safely on the server side
+        error_log("Database Insertion Error in evaluation: " . $e->getMessage());
+        
+        // 2. Display a safe, sanitized message to the user
+        die("Une erreur est survenue lors de l'enregistrement. Veuillez réessayer ultérieurement.");
     }
 } else {
     header('Location: evaluation.php');
