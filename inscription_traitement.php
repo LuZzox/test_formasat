@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'connexion.php';
 $pdo = getConnexion();
 
@@ -8,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom   = htmlspecialchars(trim($_POST['prenom'] ?? ''));
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['mot_de_passe'] ?? '';
+    $promoId  = (int)($_POST['promo_id'] ?? 0); // Assuming promo_id is passed from the form
     $confirm  = $_POST['confirmation'] ?? '';
 
     $errors = [];
@@ -25,30 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Les mots de passe ne correspondent pas.";
     }
 
-    // 3. Vérifier que l'email n'est pas déjà utilisé (requête SELECT)
     if (empty($errors)) {
-        $stmt = $pdo->prepare("SELECT id FROM etudiant WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            $errors[] = "Cette adresse email est déjà utilisée par un autre compte.";
-        }
-    }
-
-    // Si aucune erreur, on procède à l'inscription
-    if (empty($errors)) {
-        // 4. Hacher le mot de passe (password_hash)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // 5. Insérer avec une requête préparée PDO
-        $stmt = $pdo->prepare("INSERT INTO etudiant (nom, prenom, email, mot_de_passe) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$nom, $prenom, $email, $hashedPassword]);
+        // Appel de la procédure stockée
+        $stmt = $pdo->prepare("CALL sp_inscrire_etudiant(?, ?, ?, ?, ?, @succes, @message)");
+        $stmt->execute([$nom, $prenom, $email, $hashedPassword, $promoId]);
+        
+        $res = $pdo->query("SELECT @succes AS succes, @message AS message")->fetch();
 
-        // 6. Rediriger vers la page de connexion avec un message de succès
-        header('Location: login.php?registration=success');
-        exit;
-    } else {
-        // Affichage des erreurs (idéalement à gérer avec des variables de session)
-        foreach ($errors as $error) echo "<p style='color:red;'>$error</p>";
-        echo '<a href="inscription.php">Retour au formulaire</a>';
+        if ($res['succes']) {
+            $_SESSION['success_message'] = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
+            header('Location: login.php');
+            exit;
+        }
+        $errors[] = $res['message'];
     }
+
+    $_SESSION['errors'] = $errors;
+    $_SESSION['form_data'] = $_POST;
+    header('Location: inscription.php');
+    exit;
 }
