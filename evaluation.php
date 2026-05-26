@@ -12,6 +12,9 @@ if (!isset($_SESSION['etudiant_id'])) {
 // Récupération des modules pour le select
 $stmt = $pdo->query("SELECT id, nom FROM module ORDER BY nom ASC");
 $modules = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer le module_id si passé en paramètre GET (depuis le dashboard étudiant)
+$selected_module_id = $_GET['module_id'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -42,7 +45,10 @@ $modules = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <select name="module_id" id="module_id" required>
                 <option value="">-- Sélectionnez un module --</option>
                 <?php foreach ($modules as $m): ?>
-                    <option value="<?= $m['id'] ?>"><?= htmlspecialchars($m['nom']) ?></option>
+                    <option value="<?= $m['id'] ?>"
+                        <?= ($selected_module_id == $m['id']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($m['nom']) ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>

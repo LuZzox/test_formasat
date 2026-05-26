@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<?php
+header('Location: login.html'); // Redirige vers la page de connexion unifiée
+exit();
+?>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">

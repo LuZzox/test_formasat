@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         // Redirection avec message de succès
-        header('Location: dashboard.php?noted=success');
+        header('Location: dashboard.php?noted=success'); // Redirection vers le dashboard étudiant
         exit();
 
     } catch (PDOException $e) {

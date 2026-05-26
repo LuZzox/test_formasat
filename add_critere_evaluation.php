@@ -5,7 +5,7 @@ $pdo = getConnexion();
 
 // 1. Sécurité : Vérifier si l'administrateur est connecté
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: login.php?error=admin_required'); // Redirection vers la page de login avec un message d'erreur
     exit();
 }
 

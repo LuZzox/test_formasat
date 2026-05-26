@@ -19,10 +19,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // 2. Si non admin, tentative de connexion en tant qu'étudiant (par email)
+    // 2. Si non admin, tentative de connexion en tant que professeur (par email)
+    $stmt = $pdo->prepare("SELECT * FROM prof WHERE email = ?");
+    $stmt->execute([$username]);
+    $prof = $stmt->fetch();
+
+    if ($prof && password_verify($password, $prof['mot_de_passe'])) {
+        $_SESSION['prof_id'] = $prof['id'];
+        $_SESSION['prof_name'] = $prof['prenom'] . ' ' . $prof['nom'];
+        header("Location: prof_dashboard.php"); // Rediriger vers le tableau de bord du professeur
+        exit;
+    }
+
+    // 3. Si non admin et non prof, tentative de connexion en tant qu'étudiant (par email)
     $stmt = $pdo->prepare("SELECT * FROM etudiant WHERE email = ?");
     $stmt->execute([$username]);
     $etudiant = $stmt->fetch();
+
 
     if ($etudiant && password_verify($password, $etudiant['mot_de_passe'])) {
         $_SESSION['etudiant_id'] = $etudiant['id'];
@@ -31,6 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // 3. Échec de connexion
+    // 4. Échec de connexion
     echo "Nom d'utilisateur ou mot de passe incorrect.";
 }
